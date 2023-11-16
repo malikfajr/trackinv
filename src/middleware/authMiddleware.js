@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const jwt = require('jsonwebtoken');
 const config = require('../app/config');
+const { wrapError } = require('../helper/formater');
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers['x-access-token'];
@@ -8,10 +9,7 @@ const authMiddleware = (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .json({
-        status: 'error',
-        message: 'unauthorized',
-      })
+      .json(wrapError('unauthorized'))
       .end();
   }
 
@@ -19,10 +17,7 @@ const authMiddleware = (req, res, next) => {
   if (!decode) {
     return res
       .status(401)
-      .json({
-        status: 'error',
-        message: 'unauthorized',
-      })
+      .json(wrapError('unauthorized'))
       .end();
   }
 

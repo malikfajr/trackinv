@@ -19,7 +19,7 @@ const registerController = async (req, res) => {
 
   try {
     const newPassword = bcrypt.hashSync(password, 15);
-    const user = await User.create({
+    await User.create({
       nama_toko: namaToko,
       username,
       email,
@@ -27,7 +27,7 @@ const registerController = async (req, res) => {
       alamat,
     });
 
-    return res.json(wrapSuccess(user, 'User created successfully'));
+    return res.json(wrapSuccess(null, 'User created successfully'));
   } catch (error) {
     return res.status(500).json(wrapError('User failed to create'));
   }
