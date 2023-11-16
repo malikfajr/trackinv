@@ -2,8 +2,9 @@ POST http://127.0.0.1:3000/api/v1/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "namaToko": "Toko Buku",
-    "username": "tokobuku",
+    # "namaToko": "Toko Buku",
+    # "username": "tokobuku",
+    # "username": "tttt",
     "email": "admin@tokobuku.com",
     "password": "password",
     "alamat": "Jl. Jend. Sudirman No. 1"
@@ -22,18 +23,29 @@ Content-Type: application/json
 
 GET http://127.0.0.1:3000/api/v1/categories HTTP/1.1
 Content-Type: application/json
-X-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY0OTUyMWQ0LTMzMzItNDJhOS04MzdlLWExNTVkZWE3MDRhNyIsIm5hbWFUb2tvIjoiVG9rbyBCdWt1IiwidXNlcm5hbWUiOiJ0b2tvYnVrdSIsImVtYWlsIjoiYWRtaW5AdG9rb2J1a3UuY29tIiwiYWxhbWF0IjoiSmwuIEplbmQuIFN1ZGlybWFuIE5vLiAxIiwiaWF0IjoxNzAwMDY3NDgxLCJleHAiOjE3MDAxNTM4ODF9.jErcApKw9MYTfR6T80F5WtDYlmLWlNDo1xHKRTkuSHI
+X-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ0NjZmMGRlLWQ4YjEtNDI1Yi04ZTRkLTFjNGY4ZGIyNmFjYiIsIm5hbWFUb2tvIjoiVG9rbyBCdWt1IiwidXNlcm5hbWUiOiJ0b2tvYnVrdSIsImVtYWlsIjoiYWRtaW5AdG9rb2J1a3UuY29tIiwiYWxhbWF0IjoiSmwuIEplbmQuIFN1ZGlybWFuIE5vLiAxIiwiaWF0IjoxNzAwMTQyMzA0LCJleHAiOjE3MDAyMjg3MDR9.q3IMUTtp60sDCobZrzlVkIvU8WcrR8iXpdOPsDhhVt8
 
 
 ### Create Category
 POST http://127.0.0.1:3000/api/v1/categories HTTP/1.1
 Content-Type: application/json
-X-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY0OTUyMWQ0LTMzMzItNDJhOS04MzdlLWExNTVkZWE3MDRhNyIsIm5hbWFUb2tvIjoiVG9rbyBCdWt1IiwidXNlcm5hbWUiOiJ0b2tvYnVrdSIsImVtYWlsIjoiYWRtaW5AdG9rb2J1a3UuY29tIiwiYWxhbWF0IjoiSmwuIEplbmQuIFN1ZGlybWFuIE5vLiAxIiwiaWF0IjoxNzAwMDY3NDgxLCJleHAiOjE3MDAxNTM4ODF9.jErcApKw9MYTfR6T80F5WtDYlmLWlNDo1xHKRTkuSHI
+X-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ0NjZmMGRlLWQ4YjEtNDI1Yi04ZTRkLTFjNGY4ZGIyNmFjYiIsIm5hbWFUb2tvIjoiVG9rbyBCdWt1IiwidXNlcm5hbWUiOiJ0b2tvYnVrdSIsImVtYWlsIjoiYWRtaW5AdG9rb2J1a3UuY29tIiwiYWxhbWF0IjoiSmwuIEplbmQuIFN1ZGlybWFuIE5vLiAxIiwiaWF0IjoxNzAwMTQyMzA0LCJleHAiOjE3MDAyMjg3MDR9.q3IMUTtp60sDCobZrzlVkIvU8WcrR8iXpdOPsDhhVt8
 
 {
     "name": "Tas"
 }
 
 ### Update Category
+PUT http://127.0.0.1:3000/api/v1/categories/06dd53d0-43bb-4813-a0cf-88d854a93b55 HTTP/1.1
+Content-Type: application/json
+X-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ0NjZmMGRlLWQ4YjEtNDI1Yi04ZTRkLTFjNGY4ZGIyNmFjYiIsIm5hbWFUb2tvIjoiVG9rbyBCdWt1IiwidXNlcm5hbWUiOiJ0b2tvYnVrdSIsImVtYWlsIjoiYWRtaW5AdG9rb2J1a3UuY29tIiwiYWxhbWF0IjoiSmwuIEplbmQuIFN1ZGlybWFuIE5vLiAxIiwiaWF0IjoxNzAwMTQyMzA0LCJleHAiOjE3MDAyMjg3MDR9.q3IMUTtp60sDCobZrzlVkIvU8WcrR8iXpdOPsDhhVt8
 
+{
+    "name": "Buku"
+}
+
+### Delete Category
+DELETE http://127.0.0.1:3000/api/v1/categories/06dd53d0-43bb-4813-a0cf-88d854a93b55 HTTP/1.1
+Content-Type: application/json
+X-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ0NjZmMGRlLWQ4YjEtNDI1Yi04ZTRkLTFjNGY4ZGIyNmFjYiIsIm5hbWFUb2tvIjoiVG9rbyBCdWt1IiwidXNlcm5hbWUiOiJ0b2tvYnVrdSIsImVtYWlsIjoiYWRtaW5AdG9rb2J1a3UuY29tIiwiYWxhbWF0IjoiSmwuIEplbmQuIFN1ZGlybWFuIE5vLiAxIiwiaWF0IjoxNzAwMTQyMzA0LCJleHAiOjE3MDAyMjg3MDR9.q3IMUTtp60sDCobZrzlVkIvU8WcrR8iXpdOPsDhhVt8
 

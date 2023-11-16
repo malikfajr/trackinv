@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../model');
 const config = require('../app/config');
+const { wrapSuccess, wrapError } = require('../helper/formater');
 
 const registerController = async (req, res) => {
   const {
@@ -26,21 +27,9 @@ const registerController = async (req, res) => {
       alamat,
     });
 
-    return res.json({
-      status: 'success',
-      data: {
-        id: user.id,
-        namaToko: user.namaToko,
-        username: user.username,
-        email: user.email,
-        alamat: user.alamat,
-      },
-    });
+    return res.json(wrapSuccess(user, 'User created successfully'));
   } catch (error) {
-    return res.status(500).json({
-      status: 'error',
-      message: error.message,
-    });
+    return res.status(500).json(wrapError('User failed to create'));
   }
 };
 
@@ -61,48 +50,28 @@ const loginController = async (req, res) => {
       },
     });
 
-    console.log('1', user);
     if (!user) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'email atau password salah',
-      });
+      return res.status(400).json(wrapError('email atau password salah'));
     }
-    console.log('2', user);
 
     const isValidPassword = bcrypt.compareSync(password, user.password);
     if (!isValidPassword) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'email atau password salah',
-      });
+      return res.status(400).json(wrapError('email atau password salah'));
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        namaToko: user.namaToko,
-        username: user.username,
-        email: user.email,
-        alamat: user.alamat,
-      },
-      config.JWT_SECRET,
-      {
-        expiresIn: '1d',
-      }
-    );
+    const payload = {
+      id: user.id,
+      namaToko: user.namaToko,
+      username: user.username,
+      email: user.email,
+      alamat: user.alamat,
+    };
 
-    return res.json({
-      status: 'success',
-      data: {
-        id: user.id,
-        namaToko: user.namaToko,
-        username: user.username,
-        email: user.email,
-        alamat: user.alamat,
-        token,
-      },
+    const token = jwt.sign(payload, config.JWT_SECRET, {
+      expiresIn: '1d',
     });
+
+    return res.json(wrapSuccess({ token, user: payload }, 'Login success'));
   } catch (error) {
     return res.status(500).json({
       status: 'error',

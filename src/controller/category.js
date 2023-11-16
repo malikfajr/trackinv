@@ -1,3 +1,4 @@
+const { wrapSuccess, wrapError } = require('../helper/formater');
 const { Category, User } = require('../model');
 
 const getAllCategories = async (req, res) => {
@@ -5,12 +6,16 @@ const getAllCategories = async (req, res) => {
     const { id } = req.user;
 
     const categories = await Category.findAll({
+      attributes: ['id', 'name'],
       where: {
         userId: id,
       },
     });
 
-    res.status(200).json(categories).end();
+    res
+      .status(200)
+      .json(wrapSuccess(categories, 'Success get all categories'))
+      .end();
   } catch (err) {
     console.log(err);
     res.status(500).json(err).end();
@@ -44,7 +49,10 @@ const createCategory = async (req, res) => {
       userId: id,
     });
 
-    return res.status(201).json(category).end();
+    return res
+      .status(201)
+      .json(wrapSuccess({ id: category.id, name }))
+      .end();
   } catch (err) {
     return res.status(500).json(err).end();
   }
@@ -55,6 +63,7 @@ const getCategory = async (req, res) => {
     const { id } = req.params;
 
     const category = await Category.findOne({
+      attributes: ['id', 'name'],
       where: {
         id,
       },
@@ -71,7 +80,7 @@ const updateCategory = async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
 
-    const category = await Category.update(
+    await Category.update(
       {
         name,
       },
@@ -82,7 +91,10 @@ const updateCategory = async (req, res) => {
       }
     );
 
-    res.status(200).json(category).end();
+    res
+      .status(200)
+      .json(wrapSuccess({ id, name }, 'Success update category'))
+      .end();
   } catch (err) {
     res.status(500).json(err).end();
   }
@@ -92,15 +104,19 @@ const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const category = await Category.destroy({
+    await Category.destroy({
       where: {
         id,
       },
     });
 
-    res.status(200).json(category).end();
+    res
+      .status(200)
+      .json(wrapSuccess(null, 'Delete category successfully'))
+      .end();
   } catch (err) {
-    res.status(500).json(err).end();
+    console.log(err);
+    res.status(500).json(wrapError('Delete category failed')).end();
   }
 };
 

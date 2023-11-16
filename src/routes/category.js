@@ -7,11 +7,14 @@ const {
   deleteCategory,
 } = require('../controller/category');
 const authMiddleware = require('../middleware/authMiddleware');
+const valid = require('../middleware/validationMiddleware');
+const { categorySchema } = require('../request/category');
 
-router.get('/', authMiddleware, getAllCategories);
-router.post('/', authMiddleware, createCategory);
-router.get('/:id', authMiddleware, getCategory);
-router.put('/:id', authMiddleware, updateCategory);
-router.delete('/:id', authMiddleware, deleteCategory);
+router.use(authMiddleware);
+router.get('/', getAllCategories);
+router.post('/', valid(categorySchema), createCategory);
+router.get('/:id', getCategory);
+router.put('/:id', valid(categorySchema), updateCategory);
+router.delete('/:id', deleteCategory);
 
 module.exports = router;
