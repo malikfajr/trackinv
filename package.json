@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.3",
     "sequelize": "^6.35.0",
+    "swagger-ui-express": "^5.0.0",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
