@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../model');
 const config = require('../app/config');
 const { wrapSuccess, wrapError } = require('../helper/formater');
+const db = require('../app/db');
+const Gudang = require('../model/gudang');
 
 const registerController = async (req, res) => {
   const {
@@ -17,18 +19,30 @@ const registerController = async (req, res) => {
     });
   }
 
+  const t = await db.transaction();
+
   try {
     const newPassword = bcrypt.hashSync(password, 15);
-    await User.create({
+    const user = await User.create({
       nama_toko: namaToko,
       username,
       email,
       password: newPassword,
       alamat,
-    });
+    }, { transaction: t });
+
+    await Gudang.create({
+      name: 'Gudang Utama',
+      alamat,
+      userId: user.id,
+    }, { transaction: t });
+
+    await t.commit();
 
     return res.json(wrapSuccess(null, 'User created successfully'));
   } catch (error) {
+    console.error(error);
+    await t.rollback();
     return res.status(500).json(wrapError('User failed to create'));
   }
 };
@@ -48,6 +62,7 @@ const loginController = async (req, res) => {
       where: {
         email,
       },
+      include: { model: Gudang, as: 'gudang' },
     });
 
     if (!user) {
@@ -58,7 +73,7 @@ const loginController = async (req, res) => {
     if (!isValidPassword) {
       return res.status(400).json(wrapError('email atau password salah'));
     }
-
+    console.log(user);
     const payload = {
       id: user.id,
       namaToko: user.namaToko,
@@ -67,7 +82,7 @@ const loginController = async (req, res) => {
       alamat: user.alamat,
     };
 
-    const token = jwt.sign(payload, config.JWT_SECRET, {
+    const token = jwt.sign({ gudangId: user.gudang.id, ...payload }, config.JWT_SECRET, {
       expiresIn: '1d',
     });
 

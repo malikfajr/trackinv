@@ -346,6 +346,50 @@
         }
       
       }
+    },
+    "/products": {
+      "get": {
+        "description": "Get All Products",
+        "tags": [
+          "Product"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "summary": "Get All Products",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ProductSchema"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -389,6 +433,34 @@
           "name": {
             "type": "string",
             "example": "Category 1"
+          }
+        }
+      },
+      "ProductSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5f9e1b1b9b0b3a0017b0b3a0"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CategorySchema"
+          },
+          "name": {
+            "type": "string",
+            "example": "Product 1"
+          },
+          "hargaJual": {
+            "type": "integer",
+            "example": 10000
+          },
+          "hargaBeli": {
+            "type": "integer",
+            "example": 5000
+          },
+          "stok": {
+            "type": "integer",
+            "example": 10
           }
         }
       },

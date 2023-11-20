@@ -2,9 +2,14 @@ const { wrapError } = require('../helper/formater');
 
 module.exports = (schema) => async (req, res, next) => {
   try {
-    const { body } = req;
+    const { body, user } = req;
+
+    let context = {};
+
+    if (user) context = user;
     await schema.validateAsync(body, {
       abortEarly: false,
+      context,
     });
     return next();
   } catch (error) {

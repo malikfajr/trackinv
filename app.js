@@ -14,6 +14,9 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', require('./src/routes/auth'));
 app.use('/api/v1/categories', require('./src/routes/category'));
+app.use('/api/v1/products', require('./src/routes/product'));
+
+// TODO: add route for Transaction
 
 app.use((req, res) => {
   res.status(404).json({
