@@ -49,4 +49,13 @@ ItemTransaction.belongsTo(Partner, { foreignKey: 'partnerId' });
   db.sync({ alter: true, force: false });
 })();
 
-module.exports = { User, Category };
+module.exports = {
+  User,
+  Category,
+  Membership,
+  Product,
+  Gudang,
+  Transaction,
+  ItemTransaction,
+  Partner,
+};

@@ -83,7 +83,7 @@ const loginController = async (req, res) => {
     };
 
     const token = jwt.sign({ gudangId: user.gudang.id, ...payload }, config.JWT_SECRET, {
-      expiresIn: '1d',
+      expiresIn: '30d',
     });
 
     return res.json(wrapSuccess({ token, user: payload }, 'Login success'));

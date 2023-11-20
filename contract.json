@@ -238,7 +238,6 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         }
-      
       },
       "put": {
         "tags": [
@@ -344,7 +343,6 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         }
-      
       }
     },
     "/products": {
@@ -356,6 +354,18 @@
         "security": [
           {
             "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "query",
+            "name": "categoryId",
+            "example": "86d7a199-d3e9-458a-bcbe-6c3e7417ea62",
+            "required": false
           }
         ],
         "summary": "Get All Products",
@@ -378,6 +388,176 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "description": "Create Product",
+        "summary": "Create Product",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "tags": [
+          "Product"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ProductSchema"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/products/:id": {
+      "get": {
+        "description": "Get Product",
+        "tags": [
+          "Product"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "summary": "Get Product",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "description": "Update Product",
+        "summary": "Update Product",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "tags": [
+          "Product"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete Product",
+        "summary": "Delete Product",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "tags": [
+          "Product"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSchema"
                 }
               }
             }
@@ -527,6 +707,31 @@
           "name": {
             "type": "string",
             "example": "Category 1"
+          }
+        }
+      },
+      "ProductBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Product 1"
+          },
+          "stock": {
+            "type": "string",
+            "example": 10
+          },
+          "categoryId": {
+            "type": "string",
+            "example": "5f9e1b1b9b0b3a0017b0b3a0"
+          },
+          "hargaBeli": {
+            "type": "integer",
+            "example": 5000
+          },
+          "hargaJual": {
+            "type": "integer",
+            "example": 10000
           }
         }
       }

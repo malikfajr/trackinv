@@ -4,9 +4,16 @@ const { Category } = require('../model');
 const Product = require('../model/product');
 
 const getAllProducts = async (req, res) => {
+  const { categoryId } = req.query;
+  const condition = { userId: req.user.id };
+
+  if (categoryId) {
+    condition.categoryId = categoryId;
+  }
+
   try {
     const products = await Product.findAll({
-      where: { userId: req.user.id },
+      where: condition,
       include: [
         { model: Category, as: 'category', attributes: ['id', 'name'] },
       ],
