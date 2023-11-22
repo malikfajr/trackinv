@@ -12,13 +12,12 @@ const getAllCategories = async (req, res) => {
       },
     });
 
-    res
+    return res
       .status(200)
       .json(wrapSuccess(categories, 'Success get all categories'))
       .end();
   } catch (err) {
-    console.log(err);
-    res.status(500).json(err).end();
+    return res.status(500).json(err).end();
   }
 };
 
@@ -69,9 +68,13 @@ const getCategory = async (req, res) => {
       },
     });
 
-    res.status(200).json(category).end();
+    if (!category) {
+      return res.status(404).json(wrapError('Category not found')).end();
+    }
+
+    return res.status(200).json(category).end();
   } catch (err) {
-    res.status(500).json(err).end();
+    return res.status(500).json(err).end();
   }
 };
 
@@ -80,7 +83,7 @@ const updateCategory = async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
 
-    await Category.update(
+    const category = await Category.update(
       {
         name,
       },
@@ -91,12 +94,16 @@ const updateCategory = async (req, res) => {
       }
     );
 
-    res
+    if (!category) {
+      return res.status(404).json(wrapError('Category not found')).end();
+    }
+
+    return res
       .status(200)
       .json(wrapSuccess({ id, name }, 'Success update category'))
       .end();
   } catch (err) {
-    res.status(500).json(err).end();
+    return res.status(500).json(err).end();
   }
 };
 
@@ -110,13 +117,13 @@ const deleteCategory = async (req, res) => {
       },
     });
 
-    res
+    return res
       .status(200)
       .json(wrapSuccess(null, 'Delete category successfully'))
       .end();
   } catch (err) {
     console.log(err);
-    res.status(500).json(wrapError('Delete category failed')).end();
+    return res.status(500).json(wrapError('Delete category failed')).end();
   }
 };
 

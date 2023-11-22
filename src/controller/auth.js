@@ -39,7 +39,7 @@ const registerController = async (req, res) => {
 
     await t.commit();
 
-    return res.json(wrapSuccess(null, 'User created successfully'));
+    return res.status(201).json(wrapSuccess(null, 'User created successfully'));
   } catch (error) {
     console.error(error);
     await t.rollback();

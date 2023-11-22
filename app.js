@@ -17,6 +17,8 @@ app.get('/', (req, res) => res.redirect('/doc'));
 app.use('/api/v1/auth', require('./src/routes/auth'));
 app.use('/api/v1/categories', require('./src/routes/category'));
 app.use('/api/v1/products', require('./src/routes/product'));
+app.use('/api/v1/supliers', require('./src/routes/suplier'));
+app.use('/api/v1/customers', require('./src/routes/customer'));
 
 // TODO: add route for Transaction
 

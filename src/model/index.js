@@ -44,6 +44,8 @@ Transaction.belongsTo(Partner, { foreignKey: 'partnerId' });
 Partner.hasMany(ItemTransaction, { foreignKey: 'partnerId' });
 ItemTransaction.belongsTo(Partner, { foreignKey: 'partnerId' });
 
+User.hasMany(Partner, { foreignKey: 'userId' });
+Partner.belongsTo(User, { foreignKey: 'userId' });
 // Uncomment this code to create table
 (async () => {
   db.sync({ alter: true, force: false });
