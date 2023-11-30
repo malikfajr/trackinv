@@ -570,6 +570,360 @@
           }
         }
       }
+    },
+    "/transactions": {
+      "get": {
+        "description": "Get All Transactions",
+        "tags": [
+          "Transaction"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "string"
+            },
+            "in": "query",
+            "name": "type",
+            "example": "masuk",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "in": "query",
+            "name": "startDate",
+            "example": "2020-11-01",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "in": "query",
+            "name": "endDate",
+            "example": "2020-11-01",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "query",
+            "name": "partnerId",
+            "example": "86d7a199-d3e9-458a-bcbe-6c3e7417ea62",
+            "required": false
+          }
+        ],
+        "summary": "Get All Transactions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "5f9e1b1b9b0b3a0017b0b3a0"
+                          },
+                          "partner": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "John Doe"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "customer"
+                              }
+                            }
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "keluar"
+                          },
+                          "totalHarga": {
+                            "type": "integer",
+                            "example": 100000
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2020-11-01T00:00:00.000Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/transactions/:id": {
+      "get": {
+        "description": "Get Transaction",
+        "tags": [
+          "Transaction"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "summary": "Get Transaction",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "5f9e1b1b9b0b3a0017b0b3a0"
+                        },
+                        "partner": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "John Doe"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "customer"
+                            }
+                          }
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "5f9e1b1b9b0b3a0017b0b3a0"
+                              },
+                              "productId": {
+                                "type": "string",
+                                "example": "5f9e1b1b9b0b3a0017b0b3a0"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Product 1"
+                              },
+                              "harga": {
+                                "type": "integer",
+                                "example": 10000
+                              },
+                              "qty": {
+                                "type": "integer",
+                                "example": 10
+                              }
+                            }
+                          }
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "keluar"
+                        },
+                        "totalHarga": {
+                          "type": "integer",
+                          "example": 100000
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2020-11-01T00:00:00.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/transactions/incoming": {
+      "post": {
+        "description": "Create incoming transaction",
+        "tags": [
+          "Transaction"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "summary": "Post new transaction type incoming product",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "5f9e1b1b9b0b3a0017b0b3a0"
+                    },
+                    "partner": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "customer"
+                        }
+                      }
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "keluar"
+                    },
+                    "totalHarga": {
+                      "type": "integer",
+                      "example": 100000
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2020-11-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/transactions/outgoing": {
+      "post": {
+        "description": "Create outgoing transaction",
+        "tags": [
+          "Transaction"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "summary": "Post new transaction type outgoing product",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "5f9e1b1b9b0b3a0017b0b3a0"
+                    },
+                    "partner": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "customer"
+                        }
+                      }
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "keluar"
+                    },
+                    "totalHarga": {
+                      "type": "integer",
+                      "example": 100000
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2020-11-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorize"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
     }
   },
   "components": {

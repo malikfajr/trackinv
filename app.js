@@ -19,8 +19,7 @@ app.use('/api/v1/categories', require('./src/routes/category'));
 app.use('/api/v1/products', require('./src/routes/product'));
 app.use('/api/v1/supliers', require('./src/routes/suplier'));
 app.use('/api/v1/customers', require('./src/routes/customer'));
-
-// TODO: add route for Transaction
+app.use('/api/v1/transactions', require('./src/routes/transaction'));
 
 app.use((req, res) => {
   res.status(404).json({

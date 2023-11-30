@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { User } = require('../model');
+const { User, Partner } = require('../model');
 const config = require('../app/config');
 const { wrapSuccess, wrapError } = require('../helper/formater');
 const db = require('../app/db');
@@ -11,13 +11,6 @@ const registerController = async (req, res) => {
   const {
     namaToko, username, email, password, alamat
   } = req.body;
-
-  if (!namaToko || !username || !email || !password || !alamat) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'data tidak lengkap',
-    });
-  }
 
   const t = await db.transaction();
 
@@ -35,6 +28,18 @@ const registerController = async (req, res) => {
       name: 'Gudang Utama',
       alamat,
       userId: user.id,
+    }, { transaction: t });
+
+    await Partner.created({
+      userId: user.id,
+      name: 'Default',
+      type: 'customer'
+    }, { transaction: t });
+
+    await Partner.created({
+      userId: user.id,
+      name: 'Default',
+      type: 'supplier'
     }, { transaction: t });
 
     await t.commit();

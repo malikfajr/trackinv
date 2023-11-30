@@ -15,7 +15,7 @@ const productSchema = Joi.object({
     return value;
   }),
   name: Joi.string().required().min(3).max(30),
-  stock: Joi.number().required().min(1),
+  stock: Joi.number().required().min(0).default(0),
   hargaBeli: Joi.number().required().min(1),
   hargaJual: Joi.number().required().min(1),
 });

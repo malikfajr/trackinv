@@ -18,8 +18,9 @@ const Transaction = db.define('transaction', {
   totalHarga: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    defaultValue: 0,
   },
-  taggal: {
+  tanggal: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW,
