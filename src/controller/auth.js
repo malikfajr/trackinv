@@ -30,13 +30,13 @@ const registerController = async (req, res) => {
       userId: user.id,
     }, { transaction: t });
 
-    await Partner.created({
+    await Partner.create({
       userId: user.id,
       name: 'Default',
       type: 'customer'
     }, { transaction: t });
 
-    await Partner.created({
+    await Partner.create({
       userId: user.id,
       name: 'Default',
       type: 'supplier'
