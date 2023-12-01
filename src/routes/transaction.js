@@ -10,7 +10,7 @@ const valid = require('../middleware/validationMiddleware');
 const { transactionSchema } = require('../request/transaction');
 
 router.use(authMiddleware);
-router.post('/', getAllTransaction);
+router.get('/', getAllTransaction);
 router.get('/:id', getTransactionById);
 
 router.post('/incoming', valid(transactionSchema), createIncomingTransaction);

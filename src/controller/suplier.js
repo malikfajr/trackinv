@@ -5,7 +5,7 @@ const getAllSuplier = async (req, res) => {
   try {
     const supliers = await Partner.findAll({
       where: {
-        type: 'suplier',
+        type: 'supplier',
         userId: req.user.id,
       },
     });
@@ -37,7 +37,7 @@ const createSuplier = async (req, res) => {
     const suplier = await Partner.create({
       name,
       userId: req.user.id,
-      type: 'suplier',
+      type: 'supplier',
     });
 
     return res.status(201).json(wrapSuccess(suplier));

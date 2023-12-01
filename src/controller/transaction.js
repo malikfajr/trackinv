@@ -65,9 +65,9 @@ const createIncomingTransaction = async (req, res) => {
 
     const transactionId = transaction.id;
 
-    const promises = items.map((item) => {
+    const promises = items.map(async (item) => {
       const { id, qty } = item;
-      const product = Product.findByPk(id, { transaction: t });
+      const product = await Product.findByPk(id, { transaction: t });
       ItemTransaction.create(
         {
           barangId: id,
@@ -116,9 +116,9 @@ const createOutgoingTransaction = async (req, res) => {
 
     const transactionId = transaction.id;
 
-    const promises = items.map((item) => {
+    const promises = items.map(async (item) => {
       const { id, qty } = item;
-      const product = Product.findByPk(id, { transaction: t });
+      const product = await Product.findByPk(id, { transaction: t });
 
       ItemTransaction.create(
         {
