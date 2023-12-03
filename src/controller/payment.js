@@ -44,6 +44,10 @@ const payment = async (req, res) => {
       credit_card: {
         secure: true,
       },
+      customer_details: {
+        first_name: req.user.username,
+        email: req.user.email,
+      },
     };
 
     await t.commit();
@@ -66,9 +70,6 @@ const callbackPayment = async (req, res) => {
     gross_amount: grossAmount,
     signature_key: signatureKey,
   } = req.body;
-
-  console.log('ini query', req.query);
-  console.log('ini body', req.body);
 
   const t = await db.transaction();
 
@@ -97,10 +98,10 @@ const callbackPayment = async (req, res) => {
         { where: { id: membership.userId }, transaction: t }
       );
     } else if (
-      transactionStatus === 'cancel'
-      || transactionStatus === 'deny'
-      || transactionStatus === 'expire'
-      || transactionStatus === 'failure'
+      transactionStatus === 'cancel' ||
+      transactionStatus === 'deny' ||
+      transactionStatus === 'expire' ||
+      transactionStatus === 'failure'
     ) {
       await Membership.update(
         { status: 'failed' },
@@ -117,4 +118,15 @@ const callbackPayment = async (req, res) => {
   }
 };
 
-module.exports = { payment, callbackPayment };
+const success = async (req, res) => {
+  const { order_id: orderId } = req.query;
+  const membership = await Membership.findOne({ where: { id: orderId } });
+
+  if (!membership) {
+    return res.status(404).json({ message: 'Membership not found' });
+  }
+
+  res.status(200).json(wrapSuccess(membership));
+};
+
+module.exports = { payment, callbackPayment, success };
