@@ -1,8 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
+const crypto = require('crypto');
 const midtransClient = require('midtrans-client');
 const { midtrans } = require('../app/config');
 const db = require('../app/db');
-const { Membership } = require('../model');
+const { Membership, User } = require('../model');
 
 const { wrapSuccess } = require('../helper/formater');
 
@@ -49,7 +50,6 @@ const payment = async (req, res) => {
 
     const urlPayment = await snap.createTransaction(parameter);
 
-    console.log(urlPayment);
     res.status(200).json(wrapSuccess({ ...urlPayment }));
   } catch (error) {
     await t.rollback();
@@ -58,18 +58,59 @@ const payment = async (req, res) => {
   }
 };
 
-const callbackPayment = (req, res) => {
-  const { order_id: orderId, transaction_status: transactionStatus } = req.body;
+const callbackPayment = async (req, res) => {
+  const {
+    order_id: orderId,
+    transaction_status: transactionStatus,
+    status_code: statusCode,
+    gross_amount: grossAmount,
+    signature_key: signatureKey,
+  } = req.body;
 
   console.log('ini query', req.query);
   console.log('ini body', req.body);
 
-  try {
-    console.log('order_id', orderId, 'transaction_status', transactionStatus);
+  const t = await db.transaction();
 
+  try {
+    const key = `${orderId}${statusCode}${grossAmount}${midtrans.server_key}`;
+
+    const hash = crypto.createHash('sha512').update(key).digest('hex');
+    if (hash !== signatureKey) {
+      console.log('Invalid signature key', signatureKey, ' != ', hash);
+      res.status(400).json({ message: 'Invalid signature key' });
+    }
+
+    if (transactionStatus === 'settlement') {
+      const membership = await Membership.update(
+        { status: 'success' },
+        { where: { id: orderId }, transaction: t }
+      );
+
+      User.update(
+        {
+          status: true,
+        },
+        { where: { id: membership.userId }, transaction: t }
+      );
+    } else if (
+      transactionStatus === 'cancel' ||
+      transactionStatus === 'deny' ||
+      transactionStatus === 'expire' ||
+      transactionStatus === 'failure'
+    ) {
+      Membership.update(
+        { status: 'failed' },
+        { where: { id: orderId }, transaction: t }
+      );
+    }
+
+    await t.commit();
     res.status(200).json({ message: 'OK' });
   } catch (error) {
     console.log(error);
+    await t.rollback();
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 

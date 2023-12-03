@@ -8,39 +8,49 @@ const db = require('../app/db');
 const Gudang = require('../model/gudang');
 
 const registerController = async (req, res) => {
-  const {
-    namaToko, username, email, password, alamat
-  } = req.body;
+  const { namaToko, username, email, password, alamat } = req.body;
 
   const t = await db.transaction();
 
   try {
     const newPassword = bcrypt.hashSync(password, 15);
-    const user = await User.create({
-      nama_toko: namaToko,
-      username,
-      email,
-      password: newPassword,
-      alamat,
-    }, { transaction: t });
+    const user = await User.create(
+      {
+        nama_toko: namaToko,
+        username,
+        email,
+        password: newPassword,
+        alamat,
+      },
+      { transaction: t }
+    );
 
-    await Gudang.create({
-      name: 'Gudang Utama',
-      alamat,
-      userId: user.id,
-    }, { transaction: t });
+    await Gudang.create(
+      {
+        name: 'Gudang Utama',
+        alamat,
+        userId: user.id,
+      },
+      { transaction: t }
+    );
 
-    await Partner.create({
-      userId: user.id,
-      name: 'Default',
-      type: 'customer'
-    }, { transaction: t });
+    await Partner.create(
+      {
+        userId: user.id,
+        name: 'Default',
+        type: 'customer',
+      },
+      { transaction: t }
+    );
 
-    await Partner.create({
-      userId: user.id,
-      name: 'Default',
-      type: 'supplier'
-    }, { transaction: t });
+    await Partner.create(
+      {
+        userId: user.id,
+        name: 'Default',
+        type: 'supplier',
+      },
+      { transaction: t }
+    );
 
     await t.commit();
 
@@ -78,7 +88,7 @@ const loginController = async (req, res) => {
     if (!isValidPassword) {
       return res.status(400).json(wrapError('email atau password salah'));
     }
-    console.log(user);
+
     const payload = {
       id: user.id,
       namaToko: user.namaToko,
@@ -87,9 +97,13 @@ const loginController = async (req, res) => {
       alamat: user.alamat,
     };
 
-    const token = jwt.sign({ gudangId: user.gudang.id, ...payload }, config.JWT_SECRET, {
-      expiresIn: '30d',
-    });
+    const token = jwt.sign(
+      { gudangId: user.gudang.id, ...payload },
+      config.JWT_SECRET,
+      {
+        expiresIn: '30d',
+      }
+    );
 
     return res.json(wrapSuccess({ token, user: payload }, 'Login success'));
   } catch (error) {
