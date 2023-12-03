@@ -16,6 +16,11 @@ const Membership = db.define('membership', {
     allowNull: false,
     defaultValue: DataTypes.NOW,
   },
+  status: {
+    type: DataTypes.ENUM('pending', 'success', 'failed'),
+    allowNull: false,
+    defaultValue: 'pending',
+  },
   expiryDate: {
     type: DataTypes.DATE,
     allowNull: false,

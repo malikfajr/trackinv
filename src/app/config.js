@@ -14,6 +14,10 @@ const config = {
     port: process.env.PORT || 3000,
   },
   JWT_SECRET: process.env.JWT_SECRET || 'secret',
+  midtrans: {
+    server_key: process.env.MIDTRANS_SERVER_KEY || 'secret',
+    client_key: process.env.MIDTRANS_CLIENT_KEY || 'secret',
+  }
 };
 
 module.exports = config;
