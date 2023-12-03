@@ -98,10 +98,10 @@ const callbackPayment = async (req, res) => {
         { where: { id: membership.userId }, transaction: t }
       );
     } else if (
-      transactionStatus === 'cancel' ||
-      transactionStatus === 'deny' ||
-      transactionStatus === 'expire' ||
-      transactionStatus === 'failure'
+      transactionStatus === 'cancel'
+      || transactionStatus === 'deny'
+      || transactionStatus === 'expire'
+      || transactionStatus === 'failure'
     ) {
       await Membership.update(
         { status: 'failed' },
@@ -126,7 +126,13 @@ const success = async (req, res) => {
     return res.status(404).json({ message: 'Membership not found' });
   }
 
-  res.status(200).json(wrapSuccess(membership));
+  return res.status(200).json(wrapSuccess(membership));
 };
 
-module.exports = { payment, callbackPayment, success };
+const failed = async (req, res) => {
+  res.status(422).json({ message: 'Payment failed' });
+};
+
+module.exports = {
+  payment, callbackPayment, success, failed
+};

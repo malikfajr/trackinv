@@ -8,7 +8,9 @@ const db = require('../app/db');
 const Gudang = require('../model/gudang');
 
 const registerController = async (req, res) => {
-  const { namaToko, username, email, password, alamat } = req.body;
+  const {
+    namaToko, username, email, password, alamat
+  } = req.body;
 
   const t = await db.transaction();
 
