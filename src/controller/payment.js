@@ -90,7 +90,7 @@ const callbackPayment = async (req, res) => {
       membership.status = 'success';
       await membership.save({ transaction: t });
 
-      User.update(
+      await User.update(
         {
           status: true,
         },
@@ -102,7 +102,7 @@ const callbackPayment = async (req, res) => {
       || transactionStatus === 'expire'
       || transactionStatus === 'failure'
     ) {
-      Membership.update(
+      await Membership.update(
         { status: 'failed' },
         { where: { id: orderId }, transaction: t }
       );
