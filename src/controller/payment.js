@@ -82,10 +82,13 @@ const callbackPayment = async (req, res) => {
     }
 
     if (transactionStatus === 'settlement') {
-      const membership = await Membership.update(
-        { status: 'success' },
-        { where: { id: orderId }, transaction: t }
-      );
+      const membership = await Membership.findOne({
+        where: { id: orderId },
+        transaction: t,
+      });
+
+      membership.status = 'success';
+      await membership.save({ transaction: t });
 
       User.update(
         {
@@ -94,10 +97,10 @@ const callbackPayment = async (req, res) => {
         { where: { id: membership.userId }, transaction: t }
       );
     } else if (
-      transactionStatus === 'cancel' ||
-      transactionStatus === 'deny' ||
-      transactionStatus === 'expire' ||
-      transactionStatus === 'failure'
+      transactionStatus === 'cancel'
+      || transactionStatus === 'deny'
+      || transactionStatus === 'expire'
+      || transactionStatus === 'failure'
     ) {
       Membership.update(
         { status: 'failed' },
