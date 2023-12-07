@@ -13,8 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+app.use('/', express.static('public'));
+
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.get('/', (req, res) => res.redirect('/doc'));
 
 app.use('/api/v1/auth', require('./src/routes/auth'));
 app.use('/api/v1/categories', require('./src/routes/category'));

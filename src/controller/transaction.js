@@ -6,7 +6,9 @@ const db = require('../app/db');
 
 const getAllTransaction = async (req, res) => {
   const { type } = req.query;
-  const condition = {};
+  const { user } = req;
+
+  const condition = { userId: user.id };
   try {
     if (type !== undefined) condition.type = type;
 
