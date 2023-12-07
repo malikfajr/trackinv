@@ -7,7 +7,8 @@
     "start": "node app.js",
     "start-dev": "nodemon app.js",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "reset": "node reset.js"
   },
   "keywords": [],
   "author": "",
