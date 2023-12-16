@@ -26,6 +26,7 @@ const Product = db.define('product', {
   stock: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    min: 0,
   },
   hargaBeli: {
     type: DataTypes.INTEGER,

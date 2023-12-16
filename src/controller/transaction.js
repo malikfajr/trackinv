@@ -102,6 +102,7 @@ const createIncomingTransaction = async (req, res) => {
 const createOutgoingTransaction = async (req, res) => {
   const { items, partnerId } = req.body;
   const { id: userId } = req.user;
+  let stockExist = true;
 
   const t = await db.transaction();
 
@@ -122,6 +123,10 @@ const createOutgoingTransaction = async (req, res) => {
       const { id, qty } = item;
       const product = await Product.findByPk(id, { transaction: t });
 
+      if (product.stock < qty) {
+        stockExist = false;
+      }
+
       ItemTransaction.create(
         {
           barangId: id,
@@ -138,8 +143,13 @@ const createOutgoingTransaction = async (req, res) => {
       return product.update({ stock: product.stock - qty }, { transaction: t });
     });
 
-    await transaction.save({ transaction: t });
     await Promise.all(promises);
+    await transaction.save({ transaction: t });
+
+    if (!stockExist) {
+      await t.rollback();
+      return res.status(400).json(wrapError('Stock tidak mencukupi')).end();
+    }
     await t.commit();
 
     return res
